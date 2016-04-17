@@ -5,6 +5,8 @@
   <content src="index.html"/>
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="android-minSdkVersion" value="14"/>
+  <plugin name="com.indigoway.cordova.whitelist.whitelistplugin" spec="1.1.1" source="pgb" />
+  <allow-navigation href="https://facebook.com/FieldhouseBrewingCompany/events" />
   <plugin name="cordova-plugin-battery-status" source="npm"/>
   <plugin name="cordova-plugin-camera" source="npm"/>
   <plugin name="cordova-plugin-media-capture" source="npm"/>
