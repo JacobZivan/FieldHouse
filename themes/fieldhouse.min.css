@@ -219,21 +219,21 @@ html .ui-alt-icon .ui-radio-off:after {
 	
 	
 div.ui-navbar{
-	background-color:#eafefe;
-    -webkit-filter: blur(20px);
-    -moz-filter: blur(20px);
-    -o-filter: blur(20px);
-    -ms-filter: blur(20px);
-    filter: blur(20px);
-    opacity: 0.9;
+	background-color:#eafefe!important;
+    -webkit-filter: blur(20px)!important;
+    -moz-filter: blur(20px)!important;
+    -o-filter: blur(20px)!important;
+    -ms-filter: blur(20px)!important;
+    filter: blur(20px)!important;
+    opacity: 0.9!important;
 }
 
 div.ui-navbar a{
 	color:#676767 !important;
-	border-top: 1px solid #999;
-	border-bottom:none;
-	border-left:none;
-	border-right:none;
+	border-top: 1px solid #999!important;
+	border-bottom:none!important;
+	border-left:none!important;
+	border-right:none!important;
 }
 
 div.ui-navbar a:hover{
