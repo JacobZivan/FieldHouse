@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
     <link rel="stylesheet" href="sweetalert-master/dist/sweetalert.css"/>
+    
 	<script src="sweetalert-master/dist/sweetalert.min.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -18,26 +19,219 @@
 <script>
 
 
+var SwalService = function(options) {
+  this.pendingSwal = [];
+  if (options && options.showPendingMessage != undefined) {
+    this.showPendingMessage = options.showPendingMessage;
+  }
+  this.initialize();
+}
 
-function passCode(){
+SwalService.prototype = {
+  currentSwal: null,
+  showPendingMessage: true,
+  swalFirstCalled: false,
+  __swal: swal,
+  pendingSwal: null,
+  nextId: 1,
 
+  swal: function() {
+    var pending = {
+      args: arguments,
+      id: this.nextId++
+    }
+    return this._swalWithId(pending);
+  },
+
+  _swalWithId: function(pending) {
+    var service = this;
+    if (this.isSwalOpen() || this.isClosing) {
+      this.pendingSwal.push(pending);
+    } else {
+      this.__swal.apply(null, pending.args);
+      this.currentSwal = pending;
+      if (!this.swalFirstCalled) {
+        $('.sweet-alert').prepend('<span class="other-messages"></span>');
+        this.swalFirstCalled = true;
+      }
+    }
+    this.refreshPendingText();
+    return pending.id;
+  },
+
+  onClosed: function() {
+    this.isClosing = false;
+    this.openNextSwal();
+  },
+
+  refreshPendingText: function() {
+    if (this.showPendingMessage) {
+      if (this.pendingSwal.length === 0) {
+        $('.other-messages').text('');
+      } else {
+        $('.other-messages').text(this.pendingSwal.length + ' unread alerts');
+      }
+    }
+  },
+
+  close: function(id) {
+    if (id === undefined || (this.currentSwal && this.currentSwal.id == id)) {
+      this.__swal.close();
+    } else if (id !== undefined && this.pendingSwal.length > 0) {
+      var indexOfSwalToClose;
+      for (var i = 0; i < this.pendingSwal.length; i++) {
+        if (this.pendingSwal[i].id == id) {
+          indexOfSwalToClose = i;
+          break;
+        }
+      }
+      if (!(indexOfSwalToClose === undefined)) {
+        this.pendingSwal.splice(indexOfSwalToClose, 1);
+        this.refreshPendingText();
+      }
+    }
+  },
+
+  openNextSwal: function() {
+    var service = this;
+    if (service.pendingSwal.length > 0) {
+      var pending = service.pendingSwal.shift();
+      service._swalWithId(pending);
+    }
+  },
+
+  isSwalOpen: function() {
+    return this.currentSwal != null && this.currentSwal != undefined;
+  },
+
+  closeAndFireCallback: function(id, opts) {
+    this.close(id);
+    if (this.currentSwal.args && this.currentSwal.args.length > 1 && typeof this.currentSwal.args[1] == 'function') {
+      // Currently, programatically closing the swal doesn't invoke the callback.
+      var callback = this.currentSwal.args[1];
+      callback(opts);
+    }
+  },
+
+  initialize: function() {
+    var service = this;
+    var originalClose = this.__swal.close;
+    this.__swal.close = function() {
+      service.isClosing = true;
+      originalClose();
+      service.currentSwal = null;
+      setTimeout(function() {
+        service.onClosed();
+      }, 400);
+    };
+  }
+}
+
+var swalService = new SwalService();
+
+
+pintCount = 0;
+rewardCount = 0;
+
+function loadCount(){
+	pintCount = localStorage.getItem("pint_count");
+	rewardCount = localStorage.getItem("reward_count");
+}
+
+function save(){
+	if (pintCount < 9){
+		pintCount = pintCount +1;
+	}
+	if (pintCount == 9){
+		pintCount = 0;
+		rewardCount = rewardCount+1;
+	}
+	localStorage.setItem("pint_count", pintCount);	
+	localStorage.setItem("reward_count", rewardCount);	
+}
+</script>
+<script>
+
+function pintIncrement(){
+	if (pintCount < 9){
+		pintCount = pintCount +1;	
+	}
+	if (pintCount == 9){
+		pintCount = 0;
+		rewardCount = rewardCount+1;
+	}
+	swalService.swal({   
+		title: "Heck Yea!",   
+		text: "You Rock!",   
+		type: "success",
+		animation: "pop",   
+	   confirmButtonText: "Yea... I rock!",   
+	   closeOnConfirm: false,
+	   
+	});
+	save();
+}
+</script>
+
+<script>
+function nope(){
+	if (pintCount >= 0){
+		pintCount = pintCount;
+		swalService.swal({   
+		title: "Nope!",   
+		text: "You Suck!",   
+		type: "error",
+		animation: "pop",   
+	   confirmButtonColor: "#DD6B55",   
+	   confirmButtonText: "Yea... I suck!",   
+	   closeOnConfirm: false,
+	   
+	}),
+	swal.showInputError("Invalid!");
+	}
+}
+
+</script>
+
+<script>
+
+function rewardDecrement(){
+	if (rewardCount < 1){
+		swalService.swal("NOPE!", "You haven't earned a free beer.", "error");
+	}
+	else{
+		rewardCount = rewardCount -1;
+		swalService.swal("Heck Yea!", "You rock.", "success")
+}
+</script>
+
+<script>
+
+function passCode1(){
+	
 	
 	swal({
 		title: "Enter the PassCode!",
 		type: "input",
-		showCancelButton: true,
-		CloseOnConfirm: false,
 		animation: "slide-from-top",
 		inputPlaceholder: "Don't screw this up...", 
+		showCancelButton: true,
+		CloseOnConfirm: false,
 	}, function(inputValue){
+		
+		
 		if(inputValue != "FieldHouse"){
-			swal("NOPE!", "You suck.", "error");
+			swal.close();
+			nope();
 		}
 		else{
-			swal("Heck Yea!", "You rock.", "success");
+			swal.close();
+			pintIncrement();
 		}
 	});
 }
+
+
 
 </script>
 
@@ -48,7 +242,8 @@ function passCode(){
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=222223491501037";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+}(document, 'script', 'facebook-jssdk'))};
+</script>
 
 <div id="page1" data-role="page" data-theme="a" >
 
@@ -58,9 +253,7 @@ function passCode(){
     <a href="https://facebook.com/FieldHouseBrewingCompany" target="new">facebook</a>	</div>
     
   <div data-role="content" data-theme="a">	
-  
-  <!-- <div class="fb-page" data-href="https://www.facebook.com/FieldHouseBrewingCompany/" data-tabs="events" data-width="400px" data-height="500" data-small-header="true" data-adapt-container-width="true" data-hide-cover="true" data-show-facepile="true"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/FieldHouseBrewingCompany/"><a href="https://www.facebook.com/FieldHouseBrewingCompany/">Fieldhouse Brewing Company</a></blockquote></div></div>
-       --> <p style="text-align:center;">
+  <p style="text-align:center;">
         <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FFieldHouseBrewingCompany&tabs=events&width=340&height=500&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=222223491501037" width="340" height="500" style="margin:0 auto; border:none;overflow:hidden" scrolling="yes" frameborder="0" allowTransparency="true"  align="middle"></iframe>
 	</p>
     
@@ -81,7 +274,7 @@ function passCode(){
 	<div data-role="content">	
 		<iframe style="margin:0 auto; width:98%; height:50%; z-index:0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3108.2834487207324!2d-104.82581878465172!3d38.825968879581815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x871345206b598f15%3A0x1046ceae994d6d19!2s521+S+Tejon+St%2C+Colorado+Springs%2C+CO+80903!5e0!3m2!1sen!2sus!4v1460844716108" frameborder="0" style="border:0" allowfullscreen></iframe>
 		<div data-inline="true">
-		  <button onClick="passCode()" data-inline="false">Claim a Pint</button>
+		  <button onClick="passCode1()" data-inline="false">Claim a Pint</button>
           <p style="text-align:center;">You've had no beers!</p>
 		  <button data-inline="false">Claim Reward</button>
           <p style="text-align:center;">You have no Free Beers!</p>
