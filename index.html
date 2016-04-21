@@ -11,7 +11,11 @@
 	<script src="sweetalert-master/dist/sweetalert.min.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    
+    <script>function onLoad(){
+	text()
+	}
+	window.onload = onLoad;
+    </script>
    
     
 </head>
@@ -136,30 +140,27 @@ rewardCount = 0;
 function loadCount(){
 	pintCount = localStorage.getItem("pint_count");
 	rewardCount = localStorage.getItem("reward_count");
+	text();
+}
+
+function text(){
+	document.getElementById("pintP").innerHTML = "You've had " .concat(parseInt(pintCount), " Beers!");
+	document.getElementById("rewardP").innerHTML = "You Have " .concat(parseInt(rewardCount), " Free Beers!");
+		
 }
 
 function save(){
-	if (pintCount < 9){
-		pintCount = pintCount +1;
-	}
-	if (pintCount == 9){
-		pintCount = 0;
-		rewardCount = rewardCount+1;
-	}
 	localStorage.setItem("pint_count", pintCount);	
 	localStorage.setItem("reward_count", rewardCount);	
+
+	text();
 }
+
 </script>
 <script>
 
 function pintIncrement(){
-	if (pintCount < 9){
-		pintCount = pintCount +1;	
-	}
-	if (pintCount == 9){
-		pintCount = 0;
-		rewardCount = rewardCount+1;
-	}
+	
 	swalService.swal({   
 		title: "Heck Yea!",   
 		text: "You Rock!",   
@@ -169,8 +170,16 @@ function pintIncrement(){
 	   closeOnConfirm: false,
 	   
 	});
+	if (pintCount < 9){
+		pintCount = pintCount +1;	
+	}
+	if (pintCount == 9){
+		pintCount = 0;
+		rewardCount = rewardCount+1;
+	}
 	save();
 }
+
 </script>
 
 <script>
@@ -197,11 +206,21 @@ function nope(){
 
 function rewardDecrement(){
 	if (rewardCount < 1){
-		swalService.swal("NOPE!", "You haven't earned a free beer.", "error");
+		nope();
 	}
 	else{
 		rewardCount = rewardCount -1;
-		swalService.swal("Heck Yea!", "You rock.", "success")
+		  swalService.swal({
+		  title: "Heck Yea!",   
+		  text: "You Rock!",   
+		  type: "success",
+		  animation: "pop",   
+		 confirmButtonText: "Yea... I rock!",   
+		 closeOnConfirm: false,
+	   
+		});
+	}
+	save();
 }
 </script>
 
@@ -213,6 +232,7 @@ function passCode1(){
 	swal({
 		title: "Enter the PassCode!",
 		type: "input",
+		inputType: "password",
 		animation: "slide-from-top",
 		inputPlaceholder: "Don't screw this up...", 
 		showCancelButton: true,
@@ -230,7 +250,30 @@ function passCode1(){
 		}
 	});
 }
-
+function passCode2(){
+	
+	
+	swal({
+		title: "Enter the PassCode!",
+		type: "input",
+		inputType: "password",
+		animation: "slide-from-top",
+		inputPlaceholder: "Don't screw this up...", 
+		showCancelButton: true,
+		CloseOnConfirm: false,
+	}, function(inputValue){
+		
+		
+		if(inputValue != "FieldHouse"){
+			swal.close();
+			nope();
+		}
+		else{
+			swal.close();
+			rewardDecrement();
+		}
+	});
+}
 
 
 </script>
@@ -261,7 +304,7 @@ function passCode1(){
 	<div class="ui-navbar" style="position:fixed; bottom:0px; left:0px; right:0px;" data-role="navbar">
     <ul>
     	<li><a class="active" data-transition="fade" href="#page1">Events</a></li>
-        <li><a data-transition="fade" href="#page2">Loyalty Card</a></li>
+        <li><a  data-transition="fade" href="#page2">Loyalty Card</a></li>
         <li><a data-transition="fade" href="#page3">What's On Tap</a></li>
     </ul>
 	</div>
@@ -275,9 +318,9 @@ function passCode1(){
 		<iframe style="margin:0 auto; width:98%; height:50%; z-index:0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3108.2834487207324!2d-104.82581878465172!3d38.825968879581815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x871345206b598f15%3A0x1046ceae994d6d19!2s521+S+Tejon+St%2C+Colorado+Springs%2C+CO+80903!5e0!3m2!1sen!2sus!4v1460844716108" frameborder="0" style="border:0" allowfullscreen></iframe>
 		<div data-inline="true">
 		  <button onClick="passCode1()" data-inline="false">Claim a Pint</button>
-          <p style="text-align:center;">You've had no beers!</p>
-		  <button data-inline="false">Claim Reward</button>
-          <p style="text-align:center;">You have no Free Beers!</p>
+          <p id="pintP" style="text-align:center;"></p>
+		  <button onClick="passCode2()" data-inline="false">Claim Reward</button>
+          <p id="rewardP" style="text-align:center;"></p>
 	  </div>	
         
         
