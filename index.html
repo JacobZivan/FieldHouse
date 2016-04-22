@@ -30,6 +30,9 @@ var SwalService = function(options) {
   }
   this.initialize();
 }
+/* 
+Code from https://github.com/t4t5/sweetalert/issues/457
+*/
 
 SwalService.prototype = {
   currentSwal: null,
@@ -138,8 +141,8 @@ pintCount = 0;
 rewardCount = 0;
 
 function loadCount(){
-	pintCount = localStorage.getItem("pint_count");
-	rewardCount = localStorage.getItem("reward_count");
+	pintCount = window.localStorage.getItem("pint_count");
+	rewardCount = window.localStorage.getItem("reward_count");
 	text();
 }
 
@@ -150,17 +153,13 @@ function text(){
 }
 
 function save(){
-	localStorage.setItem("pint_count", pintCount);	
-	localStorage.setItem("reward_count", rewardCount);	
-
+	window.localStorage.setItem("pint_count", pintCount);	
+	window.localStorage.setItem("reward_count", rewardCount);	
 	text();
 }
 
-</script>
-<script>
 
 function pintIncrement(){
-	
 	swalService.swal({   
 		title: "Heck Yea!",   
 		text: "You Rock!",   
@@ -180,9 +179,7 @@ function pintIncrement(){
 	save();
 }
 
-</script>
 
-<script>
 function nope(){
 	if (pintCount >= 0){
 		pintCount = pintCount;
@@ -200,9 +197,6 @@ function nope(){
 	}
 }
 
-</script>
-
-<script>
 
 function rewardDecrement(){
 	if (rewardCount < 1){
@@ -222,13 +216,8 @@ function rewardDecrement(){
 	}
 	save();
 }
-</script>
-
-<script>
 
 function passCode1(){
-	
-	
 	swal({
 		title: "Enter the PassCode!",
 		type: "input",
@@ -250,6 +239,7 @@ function passCode1(){
 		}
 	});
 }
+
 function passCode2(){
 	
 	
@@ -278,6 +268,8 @@ function passCode2(){
 
 </script>
 
+
+
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -285,7 +277,9 @@ function passCode2(){
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=222223491501037";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'))};
+}(document, 'script', 'facebook-jssdk'));
+	/*code from developer.facebook */
+
 </script>
 
 <div id="page1" data-role="page" data-theme="a" >
