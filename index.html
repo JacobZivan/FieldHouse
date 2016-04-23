@@ -4,6 +4,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>jQuery Mobile: Theme Download</title>
 	<plugin name ="Storage" value="org.apache.cordova.Storage"/>
+    <plugin name="InAppBrowser" value="org.apache.cordova.InAppBrowser"/>
+    <access origin="*" browserOnly="true" />
+    
+    <access origin="http://127.0.0.1*"/>
+    <access origin="http://phonegape.com" subdomains="true"/>
     
     <link rel="stylesheet" href="themes/fieldhouse.min.css" />
 	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
@@ -138,6 +143,9 @@ SwalService.prototype = {
 
 var swalService = new SwalService();
 
+
+
+/*end of that section of borrowed code*/
 
 pintCount = 0;
 rewardCount = 0;
@@ -282,6 +290,11 @@ function passCode2(){
 }(document, 'script', 'facebook-jssdk'));
 	/*code from developer.facebook */
 
+
+function openFacebook(){
+	navigator.app.loadUrl('https://facebook.com/FieldHouseBrewingCompany',{openExternal:true});	
+}
+
 </script>
 
 <div id="page1" data-role="page" data-theme="a" >
@@ -289,10 +302,12 @@ function passCode2(){
 	<div style="z-index:1000;" data-role="header">
 		<h1>Events</h1>
 	<!--### facebook button, need to get it to open phones browser -->
-    <a href="https://facebook.com/FieldHouseBrewingCompany" target="new">facebook</a>	</div>
+    <!--<a href="https://facebook.com/FieldHouseBrewingCompany" target="_blank">facebook</a>	</div>
+    -->
     
   <div data-role="content" data-theme="a">	
   <p style="text-align:center;">
+  <!-- code for iframe from developer.facebook-->
         <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FFieldHouseBrewingCompany&tabs=events&width=340&height=500&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=222223491501037" width="340" height="500" style="margin:0 auto; border:none;overflow:hidden" scrolling="yes" frameborder="0" allowTransparency="true"  align="middle"></iframe>
 	</p>
     
@@ -311,7 +326,11 @@ function passCode2(){
 		<h1>Loyalty Card</h1>
 	</div>
 	<div data-role="content">	
+    <p style="text-align:center">
+    
+    <!--embeded from google-->
 		<iframe style="margin:0 auto; width:98%; height:50%; z-index:0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3108.2834487207324!2d-104.82581878465172!3d38.825968879581815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x871345206b598f15%3A0x1046ceae994d6d19!2s521+S+Tejon+St%2C+Colorado+Springs%2C+CO+80903!5e0!3m2!1sen!2sus!4v1460844716108" frameborder="0" style="border:0" allowfullscreen></iframe>
+        </p>
 		<div data-inline="true">
 		  <button onClick="passCode1()" data-inline="false">Claim a Pint</button>
           <p id="pintP" style="text-align:center;"></p>
