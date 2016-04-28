@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>jQuery Mobile: Theme Download</title>
+	<title>FieldHouse</title>
 	<plugin name ="Storage" value="org.apache.cordova.Storage"/>
     <plugin name="InAppBrowser" value="org.apache.cordova.InAppBrowser"/>
     <access origin="*" browserOnly="true" />
@@ -18,15 +19,16 @@
 	<script src="sweetalert-master/dist/sweetalert.min.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    <script>function onLoad(){
-	loadCount();
+    <script>
+	function startup(){
+		loadCount();
+		text();
 	}
-	window.onload = onLoad;
     </script>
    
     
 </head>
-<body>
+<body onLoad="startup()">
 <script>
 
 
@@ -151,8 +153,17 @@ pintCount = 0;
 rewardCount = 0;
 
 function loadCount(){
+
+	if (!pintCount ){
+		pintCount = 0;
+	} else{
 	pintCount = window.localStorage.getItem("pint_count");
+	}
+	if (!rewardCount){
+		rewardCount = 0;
+	}else{
 	rewardCount = window.localStorage.getItem("reward_count");
+	}
 	text();
 }
 
@@ -279,7 +290,6 @@ function passCode2(){
 </script>
 
 
-
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -287,49 +297,37 @@ function passCode2(){
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=222223491501037";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-	/*code from developer.facebook */
-
-
-function openFacebook(){
-	navigator.app.loadUrl('https://facebook.com/FieldHouseBrewingCompany',{openExternal:true});	
-}
-
-</script>
+}(document, 'script', 'facebook-jssdk'));</script>
 
 <div id="page1" data-role="page" data-theme="a" >
 
 	<div style="z-index:1000;" data-role="header">
 		<h1>Events</h1>
-	<!--### facebook button, need to get it to open phones browser -->
-    <!--<a href="https://facebook.com/FieldHouseBrewingCompany" target="_blank">facebook</a>	</div>
-    -->
+	</div>
     
   <div data-role="content" data-theme="a">	
+  
   <p style="text-align:center;">
   <!-- code for iframe from developer.facebook-->
         <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FFieldHouseBrewingCompany&tabs=events&width=340&height=500&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=222223491501037" width="340" height="500" style="margin:0 auto; border:none;overflow:hidden" scrolling="yes" frameborder="0" allowTransparency="true"  align="middle"></iframe>
 	</p>
-    
-    </div>
+	</div>
 	<div class="ui-navbar" style="position:fixed; bottom:0px; left:0px; right:0px;" data-role="navbar">
     <ul>
-    	<li><a class="active" data-transition="fade" href="#page1">Events</a></li>
+    	<li><a class="active"  data-transition="fade" href="#page1">Events</a></li>
         <li><a  data-transition="fade" href="#page2">Loyalty Card</a></li>
-        <li><a data-transition="fade" href="#page3">What's On Tap</a></li>
+        <li><a  data-transition="fade" href="#page3">What's On Tap</a></li>
     </ul>
 	</div>
 </div>
 
 <div id="page2" data-role="page" data-theme="a" >
 	<div data-role="header">
-		<h1>Loyalty Card</h1>
+		<h1>Page Two</h1>
 	</div>
 	<div data-role="content">	
-    <p style="text-align:center">
-    
-    <!--embeded from google-->
-		<iframe style="margin:0 auto; width:98%; height:50%; z-index:0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3108.2834487207324!2d-104.82581878465172!3d38.825968879581815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x871345206b598f15%3A0x1046ceae994d6d19!2s521+S+Tejon+St%2C+Colorado+Springs%2C+CO+80903!5e0!3m2!1sen!2sus!4v1460844716108" frameborder="0" style="border:0" allowfullscreen></iframe>
+		<p style="text-align:center;"><iframe style="margin:0 auto;border:0; width:90vw; height:50vh; z-index:0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3108.2834487207324!2d-104.82581878465172!3d38.825968879581815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x871345206b598f15%3A0x1046ceae994d6d19!2s521+S+Tejon+St%2C+Colorado+Springs%2C+CO+80903!5e0!3m2!1sen!2sus!4v1460844716108" frameborder="0"  allowfullscreen></iframe>		
+        
         </p>
 		<div data-inline="true">
 		  <button onClick="passCode1()" data-inline="false">Claim a Pint</button>
@@ -337,27 +335,26 @@ function openFacebook(){
 		  <button onClick="passCode2()" data-inline="false">Claim Reward</button>
           <p id="rewardP" style="text-align:center;"></p>
 	  </div>	
-        
-        
         	
+        
 	</div>
-	<div class="ui-navbar" data-role="navbar" style="position:fixed; bottom:0px; left:0px; right:0px;">
+	<div data-role="navbar" style="position:fixed; bottom:0px; left:0px; right:0px;">
     <ul>
     	<li><a data-transition="fade" href="#page1">Events</a></li>
-        <li><a class="active" data-transition="fade" href="#page2">Loyalty Card</a></li>
-        <li><a data-transition="fade" href="#page3">What's On Tap</a></li>
+        <li><a  class="active" data-transition="fade" href="#page2">Loyalty Card</a></li>
+        <li><a  data-transition="fade" href="#page3">What's On Tap</a></li>
     </ul>
 	</div>
 </div>
 
 <div id="page3" data-role="page" data-theme="a" >
 	<div data-role="header">
-		<h1>What's On Tap</h1>
+		<h1>Page Three</h1>
 	</div>
 	<div data-theme="a">	
-		<iframe style="width:100%; height:100%;z-index:0;" src="http://www.fieldhousebrew.com/beer-list/#h1.entry-header"></iframe>	
+		<iframe style="width:100vw; height:100vh;z-index:0;" src="http://www.fieldhousebrew.com/beer-list/#h1.entry-header"></iframe>	
 	</div>
-	<div class="ui-navbar" data-role="navbar" style="position:fixed; bottom:0px; left:0px; right:0px;">
+	<div data-role="navbar" style="position:fixed; bottom:0px; left:0px; right:0px;">
     <ul>
     	<li><a data-transition="fade" href="#page1">Events</a></li>
         <li><a data-transition="fade" href="#page2">Loyalty Card</a></li>
