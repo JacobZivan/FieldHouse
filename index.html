@@ -371,16 +371,16 @@ function calc(){
 <div data-role="header">
 		<h1>Drink Tracker</h1>
 	</div>
-<div>	
+<div style="padding:15px;">	
 	<p style="text-align:center;">
     Are you okay to drive? Lets find out.</p>
-    <p style="text-align:center; padding:0 10px"><small>
+    <p style="text-align:center; padding:0 10vw"><small>
     Results may vary based on body weight and may other factors. Driving under the influence is illegal and dangerous. Don't be an idiot.
     </small>
     </p><br>
 		<!-- progress bar here -->
   <h4  style="text-align:center">How long have you been here?</h4>
-  <select id="firstSelect">
+  <select  id="firstSelect">
   	<option value=".5">0.5 Hours</option>
   	<option value="1.0">1 Hour</option>
   	<option value="1.5">1.5 Hours</option>
@@ -394,7 +394,7 @@ function calc(){
   </select>
 
 	<h4  style="text-align:center;">How many have you had?</h4>
-  <select id="secondSelect">
+  <select  id="secondSelect">
     <option value="1.0">1</option>
   	<option value="2.0">2</option>
   	<option value="3.0">3</option>
@@ -407,9 +407,9 @@ function calc(){
   	<option value="10.0">10</option>
     </select>
     <br>
-    <button onClick="calc()">Calculate</button>
+    <button  onClick="calc()">Calculate</button>
     
-	<h4 style="text-align:center; padding:0 10px;" id="tracker"></h4>
+	<h4 style="text-align:center; padding:0 10vw;" id="tracker"></h4>
     
     
 </div>
